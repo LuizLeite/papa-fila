@@ -2,9 +2,10 @@ import { NextResponse } from 'next/server';
 
 const allProducts = Array.from({ length: 30 }, (_, i) => ({
   id: i + 1,
-  nome: `Produto ${i + 1}`,
-  preco: `R$ ${(Math.random() * 200 + 50).toFixed(2)}`,
-  imagem: `/products/product${(i % 6) + 1}.jpg`,
+  name: `Produto ${i + 1}`,
+  description: `Descrição do produto ${i + 1}`,
+  price: `R$ ${(Math.random() * 200 + 50).toFixed(2)}`,
+  image: `/product${i + 1}.webp`,
 }));
 
 export async function GET(request: Request) {
@@ -25,8 +26,6 @@ export async function GET(request: Request) {
       hasMore: end < allProducts.length,
     }
   }
-
-  console.log('rows:', rows);
 
   return NextResponse.json(response);
 }

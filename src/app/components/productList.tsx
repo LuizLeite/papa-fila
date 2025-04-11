@@ -6,9 +6,10 @@ import axios from 'axios';
 
 type Product = {
   id: number;
-  nome: string;
-  preco: string;
-  imagem: string;
+  name: string;
+  description: string;
+  price: string;
+  image: string;
 };
 
 export default function ProductList({ inicial }: { inicial: Product[] }) {
@@ -26,7 +27,6 @@ export default function ProductList({ inicial }: { inicial: Product[] }) {
     observer.current = new IntersectionObserver(async (entries) => {
       if (entries[0].isIntersecting) {
         const res = await axios(`/api/products?page=${page}`);
-        console.log('---> res:', res);
         setProduct((prev) => [...prev, ...res.data.data.rows]);
         setPage((p) => p + 1);
         setHasMore(res?.data?.hasMore || false);
@@ -43,15 +43,16 @@ export default function ProductList({ inicial }: { inicial: Product[] }) {
           <div key={product.id} className="bg-white shadow rounded-2xl overflow-hidden hover:shadow-lg transition-shadow">
             <div className="relative w-full h-48">
               <Image
-                src={product.imagem}
-                alt={product.nome}
+                src={product.image}
+                alt={product.name}
                 fill
                 className="object-cover"
               />
             </div>
             <div className="p-4">
-              <h2 className="text-lg font-semibold">{product.nome}</h2>
-              <p className="text-gray-500">{product.preco}</p>
+              <h2 className="text-lg font-semibold">{product.name}</h2>
+              <div className="text-sm text-gray-500">{product.description}</div>
+              <p className="text-gray-800 text-right">{product.price}</p>
             </div>
           </div>
         ))}
