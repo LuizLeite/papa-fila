@@ -2,32 +2,32 @@ import { NextResponse } from 'next/server';
 
 const allFamilies = [
   {
-    id: 1,
+    id: 0,
     name: 'Alacarte',
     image: '/alacarte.png'
   },
   {
-    id: 2,
+    id: 1,
     name: 'Almoço',
     image: '/almoco.png'
   },
   {
-    id: 3,
+    id: 2,
     name: 'Batata Frita',
     image: '/batatafrita.png'
   },
   {
-    id: 4,
+    id: 3,
     name: 'Bebidas',
     image: '/bebidas.png'
   },
   {
-    id: 5,
+    id: 4,
     name: 'Cafés',
     image: '/cafes.png'
   },
   {
-    id: 6,
+    id: 5,
     name: 'Carne Assada',
     image: '/carneassada.png'
   },

@@ -19,12 +19,18 @@ type Product = {
 };
 
 export default function ProductList({ iniFamilies, iniProducts }: { iniFamilies: Family[], iniProducts: Product[] }) {
+  const [familyIdSelected, setFamilyIdSelected] = useState(0);
   const [families, setFamilies] = useState<Family[]>(iniFamilies);
   const [products, setProducts] = useState<Product[]>(iniProducts);
   const [page, setPage] = useState(2); // já carregamos a página 1 no SSR
   const [hasMore, setHasMore] = useState(true);
   const observer = useRef<IntersectionObserver | null>(null);
   const fimRef = useRef<HTMLDivElement | null>(null);
+
+  function handleFamily(family: Family) {
+    console.log('family:', family.id, family)
+    setFamilyIdSelected(family.id)
+  }
 
   useEffect(() => {
     async function fetchData() {
@@ -62,18 +68,21 @@ export default function ProductList({ iniFamilies, iniProducts }: { iniFamilies:
           id='slider'
           className='flex w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth bg-blue-100 text-white overflow-y-auto no-scrollbar rounded-xl mb-2 p-1 gap-6 md:justify-center'>
           {families.map((family: Family) => (
-            <div key={family.id} className='flex flex-col h-26 justify-between md:w-40'>
-              <Image
-                key={family.id}
-                src={family.image}
-                alt={family.name}
-                width={80}
-                height={80}
-                // sizes="width: 80, height: 80"
-                priority={true}
-                className="flex h-80"
-              />
-            <h2 className='text-blue-800 font-bold'>{family.name}</h2>
+            <div
+              key={family.id}
+              onClick={() => handleFamily(family)}
+              className={(family.id === familyIdSelected ? 'bg-blue-400 hover:bg-blue-400' : 'hover:bg-blue-200') + ' flex flex-col h-27 justify-between w-60 object-center cursor-pointer rounded-xl'}>
+              <div className='flex justify-center w-32 md:w-48'>
+                <Image
+                  key={family.id}
+                  src={family.image}
+                  alt={family.name}
+                  width={80}
+                  height={80}
+                  priority={true}
+                />
+              </div>
+              <h2 className='text-blue-800 font-bold text-center mt-1'>{family.name}</h2>
             </div>
           ))}
         </div>
@@ -114,5 +123,5 @@ function toCurrency(value: number) {
 }
 
 function handleProduct(product: Product) {
-  console.log('handleClickProduct - product:', product)
+  console.log('product:', product)
 }
