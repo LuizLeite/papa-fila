@@ -4,20 +4,39 @@ import { useEffect, useState, useRef } from 'react';
 import Image from 'next/image';
 import axios from 'axios';
 
+type Family = {
+  id: number;
+  name: string;
+  image: string;
+};
+
 type Product = {
   id: number;
   name: string;
   description: string;
-  price: string;
+  price: number;
   image: string;
 };
 
-export default function ProductList({ inicial }: { inicial: Product[] }) {
-  const [products, setProduct] = useState<Product[]>(inicial);
+export default function ProductList({ iniFamilies, iniProducts }: { iniFamilies: Family[], iniProducts: Product[] }) {
+  const [families, setFamilies] = useState<Family[]>(iniFamilies);
+  const [products, setProducts] = useState<Product[]>(iniProducts);
   const [page, setPage] = useState(2); // já carregamos a página 1 no SSR
   const [hasMore, setHasMore] = useState(true);
   const observer = useRef<IntersectionObserver | null>(null);
   const fimRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    async function fetchData() {
+      const res = await axios(`/api/families`);
+      setFamilies(res.data.data.rows);
+    }
+    
+    fetchData();
+    return () => {
+      console.log('Cleanup on component unmount');
+    };
+    }, []);
 
   useEffect(() => {
     if (!hasMore) return;
@@ -27,7 +46,7 @@ export default function ProductList({ inicial }: { inicial: Product[] }) {
     observer.current = new IntersectionObserver(async (entries) => {
       if (entries[0].isIntersecting) {
         const res = await axios(`/api/products?page=${page}`);
-        setProduct((prev) => [...prev, ...res.data.data.rows]);
+        setProducts((prev) => [...prev, ...res.data.data.rows]);
         setPage((p) => p + 1);
         setHasMore(res?.data?.hasMore || false);
       }
@@ -38,21 +57,48 @@ export default function ProductList({ inicial }: { inicial: Product[] }) {
 
   return (
     <>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+      <div className='relative flex itens-centert'>
+        <div 
+          id='slider'
+          className='flex w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth bg-blue-100 text-white overflow-y-auto no-scrollbar rounded-xl mb-2 p-1 gap-6 md:justify-center'>
+          {families.map((family: Family) => (
+            <div key={family.id} className='flex flex-col h-26 justify-between md:w-40'>
+              <Image
+                key={family.id}
+                src={family.image}
+                alt={family.name}
+                width={80}
+                height={80}
+                // sizes="width: 80, height: 80"
+                priority={true}
+                className="flex h-80"
+              />
+            <h2 className='text-blue-800 font-bold'>{family.name}</h2>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-auto gap-2 md:gap-4">
         {products.map((product: Product) => (
-          <div key={product.id} className="bg-white shadow rounded-2xl overflow-hidden hover:shadow-lg transition-shadow">
-            <div className="relative w-full h-48">
+          <div
+              key={product.id}
+              onClick={() => handleProduct(product)}
+              className="bg-white shadow rounded-2xl overflow-hidden hover:shadow-lg transition-shadow">
+            <div className="relative w-full h-28 md:h-32 lg:h-36 xl:h-42 2xl:h-48">
               <Image
                 src={product.image}
                 alt={product.name}
                 fill
+                sizes="width: 260, height: 160"
+                priority={true}
                 className="object-cover"
               />
             </div>
-            <div className="p-4">
+            <div className="pt-0">
               <h2 className="text-lg font-semibold">{product.name}</h2>
-              <div className="text-sm text-gray-500">{product.description}</div>
-              <p className="text-gray-800 text-right">{product.price}</p>
+              <h2 className="text-sm text-gray-500">{product.description}</h2>
+              <p className="text-blue-800 text-right font-semibold">{toCurrency(product.price)}</p>
             </div>
           </div>
         ))}
@@ -61,4 +107,12 @@ export default function ProductList({ inicial }: { inicial: Product[] }) {
       {!hasMore && <div className="text-center text-gray-400 mt-6">Todos os produtos foram carregados.</div>}
     </>
   );
+}
+
+function toCurrency(value: number) {
+  return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(value);
+}
+
+function handleProduct(product: Product) {
+  console.log('handleClickProduct - product:', product)
 }
