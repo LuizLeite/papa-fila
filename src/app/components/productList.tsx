@@ -73,7 +73,7 @@ export default function ProductList({ iniFamilies, iniProducts }: { iniFamilies:
               key={family.id}
               onClick={() => handleFamily(family)}
               className={(family.id === familyIdSelected ? 'bg-blue-400 hover:bg-blue-400' : 'hover:bg-blue-200') + ' flex flex-col h-27 justify-between w-60 object-center cursor-pointer rounded-xl'}>
-              <div className='flex justify-center w-32 md:w-48'>
+              <div className='flex justify-center'>
                 <Image
                   key={family.id}
                   src={family.image}
