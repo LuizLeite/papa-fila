@@ -101,7 +101,7 @@ export default function ProductList({ iniFamilies, iniProducts }: { iniFamilies:
                 className="object-cover"
               />
             </div>
-            <div className="pt-0">
+            <div className="pt-0 bg-blue-100">
               <h2 className="text-lg font-semibold">{product.name}</h2>
               <h2 className="text-sm text-gray-500">{product.description}</h2>
               <p className="text-blue-800 text-right font-semibold pr-1">{toCurrency(product.price)}</p>
