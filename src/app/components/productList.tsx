@@ -12,6 +12,7 @@ type Family = {
 
 type Product = {
   id: number;
+  familyId: number;
   name: string;
   description: string;
   price: number;
@@ -89,7 +90,7 @@ export default function ProductList({ iniFamilies, iniProducts }: { iniFamilies:
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-auto gap-2 md:gap-4">
-        {products.map((product: Product) => (
+        {products.map((product: Product) => familyIdSelected === product.familyId && (
           <div
               key={product.id}
               onClick={() => handleProduct(product)}
