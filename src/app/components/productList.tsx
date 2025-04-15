@@ -67,12 +67,12 @@ export default function ProductList({ iniFamilies, iniProducts }: { iniFamilies:
       <div className='relative flex itens-centert'>
         <div 
           id='slider'
-          className='flex w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth bg-blue-100 text-white overflow-y-auto no-scrollbar rounded-xl mb-2 p-1 gap-6 md:justify-center'>
+          className='flex w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth bg-blue-100 text-white overflow-y-auto sm:no-scrollbar rounded-xl mb-2 p-1 gap-6 md:justify-center'>
           {families.map((family: Family) => (
             <div
               key={family.id}
               onClick={() => handleFamily(family)}
-              className={(family.id === familyIdSelected ? 'bg-blue-400 hover:bg-blue-400' : 'hover:bg-blue-200') + ' flex flex-col h-27 justify-between w-60 object-center cursor-pointer rounded-xl'}>
+              className={(family.id === familyIdSelected ? 'bg-blue-400 hover:bg-blue-400' : 'hover:bg-blue-200') + ' flex flex-col h-27 justify-between object-center cursor-pointer rounded-xl'}>
               <div className='flex justify-center'>
                 <Image
                   key={family.id}
@@ -83,7 +83,7 @@ export default function ProductList({ iniFamilies, iniProducts }: { iniFamilies:
                   priority={true}
                 />
               </div>
-              <h2 className='text-blue-800 font-bold text-center mt-1'>{family.name}</h2>
+              <h2 className='text-blue-800 font-bold text-center mt-1 min-w-32'>{family.name}</h2>
             </div>
           ))}
         </div>
@@ -108,13 +108,13 @@ export default function ProductList({ iniFamilies, iniProducts }: { iniFamilies:
             <div className="pt-0">
               <h2 className="text-lg font-semibold">{product.name}</h2>
               <h2 className="text-sm text-gray-500">{product.description}</h2>
-              <p className="text-blue-800 text-right font-semibold">{toCurrency(product.price)}</p>
+              <p className="text-blue-800 text-right font-semibold pr-1">{toCurrency(product.price)}</p>
             </div>
           </div>
         ))}
       </div>
-      {hasMore && <div ref={fimRef} className="h-10 mt-6 text-center">Carregando mais...</div>}
-      {!hasMore && <div className="text-center text-gray-400 mt-6">Todos os produtos foram carregados.</div>}
+      {/* {hasMore && <div ref={fimRef} className="h-10 mt-6 text-center">Carregando mais...</div>}
+      {!hasMore && <div className="text-center text-gray-400 mt-6">Todos os produtos foram carregados.</div>} */}
     </>
   );
 }
