@@ -20,16 +20,17 @@ type Product = {
 };
 
 export default function ProductList({ iniFamilies, iniProducts }: { iniFamilies: Family[], iniProducts: Product[] }) {
+  const [carrinho, setCarrinho] = useState([]);
   const [familyIdSelected, setFamilyIdSelected] = useState(0);
   const [families, setFamilies] = useState<Family[]>(iniFamilies);
   const [products, setProducts] = useState<Product[]>(iniProducts);
-  const [page, setPage] = useState(2); // já carregamos a página 1 no SSR
+  const [page, setPage] = useState(2);
   const [hasMore, setHasMore] = useState(true);
   const observer = useRef<IntersectionObserver | null>(null);
   const fimRef = useRef<HTMLDivElement | null>(null);
 
   function handleFamily(family: Family) {
-    console.log('family:', family.id, family)
+    console.log('family:', family)
     setFamilyIdSelected(family.id)
   }
 
@@ -46,20 +47,15 @@ export default function ProductList({ iniFamilies, iniProducts }: { iniFamilies:
     }, []);
 
   useEffect(() => {
-    if (!hasMore) return;
-
-    if (observer.current) observer.current.disconnect();
-
-    observer.current = new IntersectionObserver(async (entries) => {
-      if (entries[0].isIntersecting) {
-        const res = await axios(`/api/products?page=${page}`);
-        setProducts((prev) => [...prev, ...res.data.data.rows]);
-        setPage((p) => p + 1);
-        setHasMore(res?.data?.hasMore || false);
-      }
-    });
-
-    if (fimRef.current) observer.current.observe(fimRef.current);
+    async function fetchData() {
+      const res = await axios(`/api/products`);
+      setProducts(res.data.data.rows);
+    }
+    
+    fetchData();
+    return () => {
+      console.log('Cleanup on component unmount');
+    };
   }, [page, hasMore]);
 
   return (
