@@ -104,7 +104,29 @@ export default function ProductList({ iniFamilies, iniProducts }: { iniFamilies:
             <div className="pt-0 bg-blue-100">
               <h2 className="text-lg font-semibold">{product.name}</h2>
               <h2 className="text-sm text-gray-500">{product.description}</h2>
-              <p className="text-blue-800 text-right font-semibold pr-1">{toCurrency(product.price)}</p>
+              <div className="flex flex-row ml-1 justify-between">
+                <div className='flex flex-row gap-2'>
+                  <Image
+                    src='/plus.png'
+                    alt="somar"
+                    width={28}
+                    height={28}
+                    priority={true}
+                    className="object-cover cursor-pointer opacity-75 transition-transform duration-300 transform hover:scale-125 peer"
+                  />
+
+                  <Image
+                    src='/minus.png'
+                    alt="subtrair"
+                    width={28}
+                    height={28}
+                    priority={true}
+                    className="object-cover cursor-pointer opacity-75 transition-transform duration-300 transform hover:scale-125 peer"
+                  />
+                </div>
+
+                <p className="text-blue-800 text-right font-semibold pr-2 transition-transform duration-300 transform hover:scale-125 peer">{toCurrency(product.price)}</p>
+              </div>
             </div>
           </div>
         ))}
