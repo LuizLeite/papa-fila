@@ -114,7 +114,7 @@ export default function ProductList({ iniFamilies, iniProducts }: { iniFamilies:
       //     />
       //   </div>
       }
-      
+
       {products && products.length > 0 ? <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-auto gap-2 md:gap-4">
         {products.map((product: Product) => familyIdSelected === product.familyId && (
           <div
