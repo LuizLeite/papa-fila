@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from 'react';
 import Image from 'next/image';
 import axios from 'axios';
+import { useCarrinho } from '../stores/globalStore';
 
 type Family = {
   id: number;
@@ -17,9 +18,12 @@ type Product = {
   description: string;
   price: number;
   image: string;
+  qtd: number;
 };
 
 export default function ProductList({ iniFamilies, iniProducts }: { iniFamilies: Family[], iniProducts: Product[] }) {
+  const [qtdCarrinho, setQtdCarrinho] = useState(0)
+  const [totCarrinho, setTotCarrinho] = useState(0.0)
   const [carrinho, setCarrinho] = useState([]);
   const [familyIdSelected, setFamilyIdSelected] = useState(0);
   const [families, setFamilies] = useState<Family[]>(iniFamilies);
@@ -28,10 +32,29 @@ export default function ProductList({ iniFamilies, iniProducts }: { iniFamilies:
   const [hasMore, setHasMore] = useState(true);
   const observer = useRef<IntersectionObserver | null>(null);
   const fimRef = useRef<HTMLDivElement | null>(null);
+  const {
+    state: { itens, qtdTotal, valTotal },
+    actions: {addItem, delItem}
+  } = useCarrinho()
 
   function handleFamily(family: Family) {
-    console.log('family:', family)
     setFamilyIdSelected(family.id)
+  }
+
+  function handlePlusProduct(product: Product) {
+    product.qtd++
+    // const prods = products.filter(e => e.id !== product.id );
+
+    setProducts(JSON.parse(JSON.stringify(products)))
+    console.log('handle Product Plus')
+  }
+
+  function handleMinusProduct(product: Product) {
+    if (product.qtd > 0) {
+      product.qtd--
+      setProducts(JSON.parse(JSON.stringify(products)))
+      console.log('handle Product Minus')
+    }
   }
 
   useEffect(() => {
@@ -102,7 +125,10 @@ export default function ProductList({ iniFamilies, iniProducts }: { iniFamilies:
               />
             </div>
             <div className="pt-0 bg-blue-100">
-              <h2 className="text-lg font-semibold">{product.name}</h2>
+              <div className='flex flex-row justify-between mr-1'>
+                <h2 className='text-lg font-semibold'>{product.name}</h2>
+                {product.qtd > 0 && <h2 className='text-lg font-semibold text-blue-800 text-right'>{product.qtd}</h2>}
+              </div>
               <h2 className="text-sm text-gray-500">{product.description}</h2>
               <div className="flex flex-row ml-1 justify-between">
                 <div className='flex flex-row gap-2'>
@@ -112,17 +138,21 @@ export default function ProductList({ iniFamilies, iniProducts }: { iniFamilies:
                     width={28}
                     height={28}
                     priority={true}
+                    title='Adicionar ao carrinho'
                     className="object-cover cursor-pointer opacity-75 transition-transform duration-300 transform hover:scale-125 peer"
+                    onClick = {() => handlePlusProduct(product)}
                   />
 
-                  <Image
+                {product.qtd > 0 && <Image
                     src='/minus.png'
                     alt="subtrair"
                     width={28}
                     height={28}
                     priority={true}
+                    title='Remover 1 item do carrinho'
                     className="object-cover cursor-pointer opacity-75 transition-transform duration-300 transform hover:scale-125 peer"
-                  />
+                    onClick = {() => handleMinusProduct(product)}
+                    />}
                 </div>
 
                 <p className="text-blue-800 text-right font-semibold pr-2 transition-transform duration-300 transform hover:scale-125 peer">{toCurrency(product.price)}</p>
@@ -131,8 +161,6 @@ export default function ProductList({ iniFamilies, iniProducts }: { iniFamilies:
           </div>
         ))}
       </div>
-      {/* {hasMore && <div ref={fimRef} className="h-10 mt-6 text-center">Carregando mais...</div>}
-      {!hasMore && <div className="text-center text-gray-400 mt-6">Todos os produtos foram carregados.</div>} */}
     </>
   );
 }

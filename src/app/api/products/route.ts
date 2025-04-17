@@ -7,6 +7,7 @@ const allProducts = Array.from({ length: 30 }, (_, i) => ({
   description: `Descrição do produto ${i + 1}`,
   price: Math.abs((Math.random() * 200 + 50) * 100) / 100,
   image: `/product${i + 1}.jpg`,
+  qtd: 0,
 }));
 
 console.log('allProducts:', allProducts)
