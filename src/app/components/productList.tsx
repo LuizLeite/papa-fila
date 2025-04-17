@@ -41,19 +41,15 @@ export default function ProductList({ iniFamilies, iniProducts }: { iniFamilies:
     setFamilyIdSelected(family.id)
   }
 
-  function handlePlusProduct(product: Product) {
+  function handleAddProduct(product: Product) {
     product.qtd++
-    // const prods = products.filter(e => e.id !== product.id );
-
     setProducts(JSON.parse(JSON.stringify(products)))
-    console.log('handle Product Plus')
   }
 
   function handleMinusProduct(product: Product) {
     if (product.qtd > 0) {
       product.qtd--
       setProducts(JSON.parse(JSON.stringify(products)))
-      console.log('handle Product Minus')
     }
   }
 
@@ -64,6 +60,7 @@ export default function ProductList({ iniFamilies, iniProducts }: { iniFamilies:
     }
     
     fetchData();
+
     return () => {
       console.log('Cleanup on component unmount');
     };
@@ -133,14 +130,14 @@ export default function ProductList({ iniFamilies, iniProducts }: { iniFamilies:
               <div className="flex flex-row ml-1 justify-between">
                 <div className='flex flex-row gap-2'>
                   <Image
-                    src='/plus.png'
+                    src='/add.png'
                     alt="somar"
                     width={28}
                     height={28}
                     priority={true}
                     title='Adicionar ao carrinho'
                     className="object-cover cursor-pointer opacity-75 transition-transform duration-300 transform hover:scale-125 peer"
-                    onClick = {() => handlePlusProduct(product)}
+                    onClick = {() => handleAddProduct(product)}
                   />
 
                 {product.qtd > 0 && <Image
