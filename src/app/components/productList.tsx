@@ -78,6 +78,7 @@ export default function ProductList({ iniFamilies, iniProducts }: { iniFamilies:
 
   return (
     <>
+      {families && families.length > 0 ? 
       <div className='relative flex itens-centert'>
         <div 
           id='slider'
@@ -102,8 +103,19 @@ export default function ProductList({ iniFamilies, iniProducts }: { iniFamilies:
           ))}
         </div>
       </div>
-
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-auto gap-2 md:gap-4">
+      : null
+      // <div className='flex w-full h-full align-center justify-center'>
+      //     <Image
+      //       src='/loading.gif'
+      //       alt='Loading'
+      //       width={300}
+      //       height={300}
+      //       priority={true}
+      //     />
+      //   </div>
+      }
+      
+      {products && products.length > 0 ? <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-auto gap-2 md:gap-4">
         {products.map((product: Product) => familyIdSelected === product.familyId && (
           <div
               key={product.id}
@@ -155,7 +167,18 @@ export default function ProductList({ iniFamilies, iniProducts }: { iniFamilies:
             </div>
           </div>
         ))}
+      </div> : 
+      
+      <div className='flex w-full h-full align-center justify-center'>
+        <Image
+          src='/loading2.gif'
+          alt='Loading'
+          width={300}
+          height={300}
+          priority={true}
+        />
       </div>
+      }
     </>
   );
 }
