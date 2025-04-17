@@ -22,16 +22,11 @@ type Product = {
 };
 
 export default function ProductList({ iniFamilies, iniProducts }: { iniFamilies: Family[], iniProducts: Product[] }) {
-  const [qtdCarrinho, setQtdCarrinho] = useState(0)
-  const [totCarrinho, setTotCarrinho] = useState(0.0)
-  const [carrinho, setCarrinho] = useState([]);
   const [familyIdSelected, setFamilyIdSelected] = useState(0);
   const [families, setFamilies] = useState<Family[]>(iniFamilies);
   const [products, setProducts] = useState<Product[]>(iniProducts);
   const [page, setPage] = useState(2);
   const [hasMore, setHasMore] = useState(true);
-  const observer = useRef<IntersectionObserver | null>(null);
-  const fimRef = useRef<HTMLDivElement | null>(null);
   const {
     state: { itens, qtdTotal, valTotal },
     actions: {addItem, delItem}
@@ -42,12 +37,15 @@ export default function ProductList({ iniFamilies, iniProducts }: { iniFamilies:
   }
 
   function handleAddProduct(product: Product) {
+    console.log('handleAddProduct')
+    addItem(product)
     product.qtd++
     setProducts(JSON.parse(JSON.stringify(products)))
   }
 
   function handleMinusProduct(product: Product) {
     if (product.qtd > 0) {
+      delItem(product)
       product.qtd--
       setProducts(JSON.parse(JSON.stringify(products)))
     }
@@ -109,7 +107,6 @@ export default function ProductList({ iniFamilies, iniProducts }: { iniFamilies:
         {products.map((product: Product) => familyIdSelected === product.familyId && (
           <div
               key={product.id}
-              onClick={() => handleProduct(product)}
               className="bg-white shadow rounded-2xl overflow-hidden hover:shadow-lg transition-shadow">
             <div className="relative w-full h-28 md:h-32 lg:h-36 xl:h-42 2xl:h-48">
               <Image
@@ -119,7 +116,8 @@ export default function ProductList({ iniFamilies, iniProducts }: { iniFamilies:
                 sizes="width: 260, height: 160"
                 priority={true}
                 className="object-cover"
-              />
+                onClick={() => handleProduct(product)}
+                />
             </div>
             <div className="pt-0 bg-blue-100">
               <div className='flex flex-row justify-between mr-1'>
@@ -167,5 +165,5 @@ function toCurrency(value: number) {
 }
 
 function handleProduct(product: Product) {
-  console.log('product:', product)
+  console.log('handleProduct:', product)
 }

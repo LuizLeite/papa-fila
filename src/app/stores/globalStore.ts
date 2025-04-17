@@ -9,7 +9,7 @@ type ItemProps = {
 
 type ActionsProps = {
   addItem: (item: ItemProps) => void;
-  delItem: (itemId: number) => void;
+  delItem: (item: ItemProps) => void;
 }
 
 type StoreProps = {
@@ -30,11 +30,19 @@ export const useCarrinho = create<StoreProps>((set) => ({
   actions: {
     addItem: (item: ItemProps) =>
       set((state: StoreProps) => ({
-        state: {itens: [...state.state.itens, item]}
+        state: {
+          qtdTotal: state.state.qtdTotal + 1,
+          valTotal: state.state.valTotal + item.price,
+          itens: [...state.state.itens, item]
+        }
       })),
-    delItem: (itemId: number) =>
+    delItem: (item: ItemProps) =>
       set((state: StoreProps) => ({
-        state: { itens: state.state.itens.filter((item: any) => item.id != itemId)}
+        state: {
+          qtdTotal: state.state.qtdTotal - 1,
+          valTotal: state.state.valTotal - item.price,
+          itens: state.state.itens.filter((itemX: ItemProps) => itemX.id != item.id)
+        }
       }))
   }
 }))

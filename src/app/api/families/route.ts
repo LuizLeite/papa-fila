@@ -36,12 +36,11 @@ const allFamilies = [
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
 
-  const rows = allFamilies.slice();
+  const rows = allFamilies;
   const response = {
     query: {},
     data: {
-      rows,
-      hasMore: false,
+      rows
     }
   }
 
