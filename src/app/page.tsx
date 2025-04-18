@@ -73,6 +73,7 @@ export default function HomePage() {
             height={32}
             priority={true}
             title='Menu'
+            className='flex cursor-pointer'
           />
         </div>
         <div className='flex flex-row'>
@@ -86,7 +87,7 @@ export default function HomePage() {
             />
           <h1 className="text-center md:text-left text-2xl font-bold ml-2 mb-0">Fresco Tempero</h1>
         </div>
-        <div className='flex flex-row'>
+        <div className='flex flex-row cursor-pointer'>
           <Image
             src='/carrinho.jpg'
             alt='Carrinho'
@@ -97,7 +98,7 @@ export default function HomePage() {
           { qTotal > 0 && <span
             className="inline-flex items-center rounded-xl bg-pink-200 h-6 -mt-2 px-2 py-1 text-sm text-red-900 font-bold ring-1 ring-pink-500 ring-inset">
               {qTotal}
-          </span>}
+          </span> }
         </div>
       </div>
       <ProductList
