@@ -65,17 +65,40 @@ export default function HomePage() {
   return (
     <main className="p-2">
       <div className='flex flex-row justify-between'>
-        <h1 className="text-center md:text-left text-2xl font-bold mb-0">Fresco Tempero</h1>
-          <div className='flex flex-row'>
+        <div>
+          <Image
+            src='/hamburgerMenu.png'
+            alt='Logo Fresco Tempero'
+            width={32}
+            height={32}
+            priority={true}
+            title='Menu'
+          />
+        </div>
+        <div className='flex flex-row'>
             <Image
-              src='/carrinho.jpg'
-              alt='Carrinho'
+              src='/frescotempero.jpg'
+              alt='Logo Fresco Tempero'
               width={32}
               height={32}
               priority={true}
+              className='flex rounded-lg -mt-1 mb-1'
             />
-            <span className="inline-flex items-center rounded-xl bg-pink-200 h-6 -mt-2 px-2 py-1 text-sm text-red-900 font-bold ring-1 ring-pink-500 ring-inset">{qTotal}</span>
-          </div>
+          <h1 className="text-center md:text-left text-2xl font-bold ml-2 mb-0">Fresco Tempero</h1>
+        </div>
+        <div className='flex flex-row'>
+          <Image
+            src='/carrinho.jpg'
+            alt='Carrinho'
+            width={32}
+            height={32}
+            priority={true}
+          />
+          { qTotal > 0 && <span
+            className="inline-flex items-center rounded-xl bg-pink-200 h-6 -mt-2 px-2 py-1 text-sm text-red-900 font-bold ring-1 ring-pink-500 ring-inset">
+              {qTotal}
+          </span>}
+        </div>
       </div>
       <ProductList
         iniFamilies={families}
